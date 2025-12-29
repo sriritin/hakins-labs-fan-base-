@@ -1,0 +1,644 @@
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stranger Things: Hawkins Files (Fan Tribute)</title>
+<style>
+  :root{
+    --bg:#0b0b0f; 
+    --fg:#e6e6e6;
+    --red:#ff2d2d;
+    --accent:#e50914;
+    --dim:#9b9b9b;
+    --scanline: rgba(255,255,255,0.03);
+  }
+  *{box-sizing:border-box}
+  html,body{
+    height:100%;
+    margin:0;
+    background: radial-gradient(ellipse at center, #0b0b0f 0%, #050507 60%, #000 100%);
+    color:var(--fg);
+    font-family: "Courier New", Courier, monospace;
+    overflow:hidden;
+  }
+  .crt{
+    position:fixed; inset:0; pointer-events:none;
+    background:
+      linear-gradient(to bottom, transparent 95%, var(--scanline)) 0 0/100% 3px,
+      radial-gradient(ellipse at center, rgba(255,255,255,0.02), transparent 40%) 0 0/100% 100%;
+    mix-blend-mode:overlay;
+    animation: flicker 5s infinite;
+  }
+  @keyframes flicker{
+    0%, 100% {opacity:0.15}
+    50%{opacity:0.25}
+    70%{opacity:0.18}
+  }
+  .vhs-noise{
+    position:fixed; inset:0; pointer-events:none;
+    background-image: repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.02) 0px,
+      rgba(255,255,255,0.02) 2px,
+      transparent 3px,
+      transparent 6px
+    );
+    mix-blend-mode:soft-light;
+    animation: noiseShift 2s linear infinite;
+  }
+  @keyframes noiseShift{
+    0%{transform:translateY(0)}
+    100%{transform:translateY(-3px)}
+  }
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 18px; border-bottom:1px solid #18181a; background:#0b0b0fdd; -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+    position:relative; z-index:10;
+  }
+  .logo{
+    font-weight:bold; letter-spacing: 0.15em;
+    color:var(--accent); text-shadow: 0 0 8px rgba(229,9,20,0.6), 0 0 22px rgba(255,0,0,0.3);
+    position:relative;
+  }
+  .logo .glitch{
+    position:absolute; left:0; top:0; color:#ffe3e3;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    animation: glitchTop 2.7s infinite;
+    opacity:0.6;
+  }
+  .logo .glitch2{
+    position:absolute; left:0; top:0; color:#ffd3d3;
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    animation: glitchBottom 2.9s infinite;
+    opacity:0.5;
+  }
+  @keyframes glitchTop{
+    0%{transform:translate(0,0)}
+    12%{transform:translate(-2px,-1px)}
+    24%{transform:translate(3px,1px)}
+    36%{transform:translate(-1px,0.5px)}
+    48%{transform:translate(1px,-1px)}
+    60%{transform:translate(0,0)}
+    100%{transform:translate(0,0)}
+  }
+  @keyframes glitchBottom{
+    0%{transform:translate(0,0)}
+    15%{transform:translate(1px,1px)}
+    27%{transform:translate(-3px,-1px)}
+    44%{transform:translate(2px,1px)}
+    68%{transform:translate(0,0)}
+    100%{transform:translate(0,0)}
+  }
+  nav{
+    display:flex; gap:10px; flex-wrap:wrap;
+  }
+  nav a{
+    color:var(--fg); text-decoration:none; padding:6px 10px; border:1px solid #222; border-radius:6px;
+    background:#121217; transition: all 0.2s;
+  }
+  nav a.active, nav a:hover{ border-color: var(--accent); box-shadow: 0 0 12px rgba(229,9,20,0.4); }
+  .controls{display:flex; gap:8px; align-items:center;}
+  .btn{
+    cursor:pointer; padding:6px 10px; border:1px solid #222; border-radius:6px; background:#121217; color:var(--fg);
+  }
+  .btn:hover{ border-color:#666 }
+  main{
+    position:absolute; inset:58px 0 0 0; overflow:auto; scroll-behavior:smooth;
+    padding:20px; 
+  }
+  .hero{
+    position:relative; overflow:hidden; border:1px solid #18181a; border-radius:12px;
+    background: radial-gradient(ellipse at 10% 0%, rgba(255,255,255,0.02), transparent 35%), #0a0a0e;
+    padding:22px; margin-bottom:18px;
+  }
+  .typewriter{
+    font-size:1.05rem; line-height:1.6; color:#ddd; min-height:64px;
+  }
+  .cursor{display:inline-block; width:10px; background:var(--fg); animation:blink 0.9s infinite}
+  @keyframes blink{ 0%,49%{opacity:1} 50%,100%{opacity:0} }
+  .hero-grid{
+    display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:14px;
+  }
+  .card{
+    padding:16px; border:1px solid #222; border-radius:10px; background:#0d0d13; position:relative; overflow:hidden;
+  }
+  .card::before{
+    content:""; position:absolute; inset:-2px; border-radius:10px;
+    background: conic-gradient(from 180deg at 50% 50%, rgba(229,9,20,0.12), transparent, rgba(229,9,20,0.1));
+    filter: blur(18px); opacity:0.4; pointer-events:none;
+  }
+  .card h3{ margin:0 0 8px 0; color:#f5baba; letter-spacing:0.05em }
+  .tag{ display:inline-block; padding:2px 6px; border:1px solid #333; border-radius:6px; color:#bbb; margin-right:6px; }
+  .section{
+    border:1px solid #18181a; border-radius:12px; background:#0a0a0f; padding:16px; margin:16px 0;
+  }
+  .section h2{ margin:0 0 8px 0; color:#ffb9b9; letter-spacing:0.08em; }
+  .grid{ display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:12px }
+  .item{
+    border:1px solid #222; border-radius:10px; background:#0d0d13; padding:14px;
+  }
+  .item h4{ margin:0 0 6px 0; color:#f0d7d7 }
+  #spores{ width:100%; height:220px; border-radius:10px; background:#040407; border:1px solid #18181a; }
+  .modal-backdrop{
+    position:fixed; inset:0; background: rgba(0,0,0,0.7); display:none; align-items:center; justify-content:center; z-index:999;
+  }
+  .modal{
+    width:min(560px, 92vw); background:#0a0a0f; border:1px solid #222; border-radius:12px; padding:16px;
+    box-shadow: 0 0 24px rgba(229,9,20,0.35);
+  }
+  .modal h3{ margin:0 0 8px 0; color:#ffcccc }
+  .row{ display:flex; gap:8px; margin:8px 0 }
+  .row input{
+    flex:1; padding:8px; border-radius:8px; border:1px solid #222; background:#0d0d13; color:#eee;
+  }
+  .modal .btn-primary{ border-color: var(--accent); color:#fff; background:#190406 }
+  .modal .notice{ font-size:0.9rem; color:#bbb; border-left:3px solid #333; padding-left:10px; }
+    footer{
+    text-align:center; color:#888; padding:10px 6px 16px; font-size:0.9rem;
+  }
+  .route{ display:none }
+  .route.active{ display:block; animation: routeIn 240ms ease-out }
+  @keyframes routeIn{
+    from{ opacity:0; transform: translateY(6px) }
+    to{ opacity:1; transform: translateY(0) }
+  }
+</style>
+</head>
+<body>
+  <div class="crt"></div>
+  <div class="vhs-noise"></div>
+  <header>
+    <div class="logo" aria-label="Stranger Things Fan Portal">
+      HAWKINS FILES
+      <span class="glitch">HAWKINS FILES</span>
+      <span class="glitch2">HAWKINS FILES</span>
+    </div>
+    <nav>
+      <a href="#home" data-route>Home</a>
+      <a href="#characters" data-route>Characters</a>
+      <a href="#episodes" data-route>Episodes</a>
+      <a href="#upside-down" data-route>The Upside Down</a>
+      <a href="#fan-zone" data-route>Fan Zone</a>
+    </nav>
+    <div class="controls">
+      <button class="btn" id="soundToggle" aria-label="Toggle ambience">Sound: Off</button>
+      <button class="btn" id="openLabAccess" aria-label="Hawkins Lab access">Hawkins Lab Access</button>
+    </div>
+  </header>
+
+  <main id="app" role="main" aria-live="polite">
+    <section id="home" class="route active">
+      <div class="hero">
+        <div id="typewriter" class="typewriter" aria-label="Intro narrative"></div><span class="cursor"></span>
+        <div class="hero-grid">
+          <div class="card">
+            <h3>Welcome to Hawkins</h3>
+            <p>Explore the mysteries of Hawkins, Indiana. Decode classified files, track anomalies, and step into the other side.</p>
+            <div>
+              <span class="tag">Retro</span>
+              <span class="tag">Glitch</span>
+              <span class="tag">VHS</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Interactive Terminal</h3>
+            <p>Use the navigation to access Character dossiers, Season archives, Upside Down spores, and community theories.</p>
+            <div>
+              <span class="tag">SPA</span>
+              <span class="tag">Canvas</span>
+              <span class="tag">Audio</span>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Ambient Experience</h3>
+            <p>Enable sound for eerie drones, walkie static, and synth stingers. Toggle anytime from the header controls.</p>
+            <div>
+              <span class="tag">Web Audio</span>
+              <span class="tag">Immersive</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Latest anomalies</h2>
+        <div class="grid" id="anomaliesGrid"></div>
+      </div>
+    </section>
+    <section id="characters" class="route">
+      <div class="section">
+        <h2>Character dossiers</h2>
+        <div class="grid" id="charactersGrid"></div>
+      </div>
+      <div class="section">
+        <h2>Squad builder</h2>
+        <p>Create your Hawkins squad. Click add on profiles. Your current team appears below.</p>
+        <div class="grid" id="teamGrid"></div>
+      </div>
+    </section>
+    <section id="episodes" class="route">
+      <div class="section">
+        <h2>Season archives</h2>
+        <div class="grid" id="episodesGrid"></div>
+      </div>
+    </section>
+    <section id="upside-down" class="route">
+      <div class="section">
+        <h2>Field scan: The Upside Down</h2>
+        <canvas id="spores"></canvas>
+        <p class="notice">Tip: Spores react to your cursor. Move slowly… something’s watching.</p>
+      </div>
+      <div class="section">
+        <h2>Entities & phenomena</h2>
+        <div class="grid" id="entitiesGrid"></div>
+      </div>
+    </section>
+    <section id="fan-zone" class="route">
+      <div class="section">
+        <h2>Community terminal</h2>
+        <div class="row">
+          <input id="fanName" placeholder="Codename (optional)"/>
+          <input id="fanNote" placeholder="Your theory, favorite moment, or meme"/>
+          <button class="btn" id="fanSubmit">Log</button>
+        </div>
+        <div id="fanFeed" class="grid"></div>
+      </div>
+      <div class="section">
+        <h2>Classified files</h2>
+        <div class="grid" id="filesGrid"></div>
+      </div>
+    </section>
+
+    <footer>
+      Fan tribute for creative exploration. Stranger Things™ belongs to its respective owners.
+    </footer>
+  </main>
+  <div class="modal-backdrop" id="labModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Hawkins Lab Access">
+      <h3>Hawkins Lab: Access Terminal</h3>
+      <p class="notice">Simulated login. Grants role-based UI tweaks and secret notes in Fan Zone.</p>
+      <div class="row">
+        <input id="labUser" placeholder="Agent ID"/>
+        <input id="labPass" placeholder="Keyphrase" type="password"/>
+      </div>
+      <div class="row">
+        <button class="btn btn-primary" id="labLogin">Access</button>
+        <button class="btn" id="labClose">Close</button>
+      </div>
+      <p id="labStatus" style="color:#ddd; margin:6px 0 0 0;"></p>
+    </div>
+  </div>
+
+<script>
+const anomalies = [
+  { title:"Power fluctuations", tag:"Hawkins", note:"Grid spikes reported near lab perimeter. Streetlights flicker in patterned intervals." },
+  { title:"Static on channels", tag:"AV Club", note:"Walkie signals carry whispers when tuned between stations. Not weather." },
+  { title:"Cold spots", tag:"Byers", note:"Temperature drops in hallways with peeling wallpaper. Breath visible indoors." },
+  { title:"Shadow tendrils", tag:"Forest", note:"Thin black filaments drifting against the wind. Dissolve on touch." },
+];
+
+const characters = [
+  { name:"Eleven", role:"Telekinetic", note:"Raised at Hawkins Lab; opens/cleaves gateways. Fierce loyalty.", power:"Psionic burst" },
+  { name:"Mike Wheeler", role:"Leader", note:"Heart of the group; plans and moral compass.", power:"Tactical insight" },
+  { name:"Dustin Henderson", role:"Inventor", note:"Tech wizard; solutions under pressure.", power:"Device crafting" },
+  { name:"Lucas Sinclair", role:"Sharpshooter", note:"Pragmatic, steady aim; skeptical until evidence.", power:"Precision shots" },
+  { name:"Max Mayfield", role:"Skater", note:"Courageous with sharp instincts.", power:"Resilience" },
+  { name:"Jim Hopper", role:"Chief", note:"Protective force; relentless drive.", power:"Intimidation" },
+  { name:"Joyce Byers", role:"Mother", note:"Sees patterns others miss.", power:"Intuition" },
+  { name:"Steve Harrington", role:"Babysitter", note:"Bat-swing specialist with unexpected bravery.", power:"Crowd control" },
+];
+
+const episodes = [
+  { season:1, name:"The Vanishing of Will Byers", vibe:"Mystery ignition", type:"VHS" },
+  { season:1, name:"The Upside Down", vibe:"Worlds collide", type:"VHS" },
+  { season:2, name:"MADMAX", vibe:"New energy", type:"Tape" },
+  { season:2, name:"The Gate", vibe:"Closing time", type:"Tape" },
+  { season:3, name:"The Battle of Starcourt", vibe:"Neon crescendo", type:"Tape" },
+  { season:4, name:"Dear Billy", vibe:"Heart and horror", type:"Tape" },
+];
+
+const entities = [
+  { name:"Demogorgon", threat:"High", note:"Predatory, drawn to blood, agile." },
+  { name:"Mind Flayer", threat:"Severe", note:"Hive dominance; manipulates networks." },
+  { name:"Demodogs", threat:"Moderate", note:"Pack hunters; fast and relentless." },
+  { name:"Vecna", threat:"Cataclysmic", note:"Psychic predator; trauma exploitation." },
+];
+
+const files = [
+  { id:"HF-001", title:"Gate resonance", note:"Acoustic spectra correlate with emotional stress signatures." },
+  { id:"HF-014", title:"Spores drift map", note:"Particles cluster near junctures and metallic surfaces." },
+  { id:"HF-027", title:"Signal anomalies", note:"Walkie cross-talk forms recognizable phrases at 3AM." },
+];
+
+const routes = Array.from(document.querySelectorAll('[data-route]'));
+const sections = Array.from(document.querySelectorAll('.route'));
+function setRoute(hash){
+  const target = (hash || '#home').toLowerCase();
+  routes.forEach(a => a.classList.toggle('active', a.getAttribute('href').toLowerCase() === target));
+  sections.forEach(s => s.classList.toggle('active', `#${s.id}` === target));
+}
+window.addEventListener('hashchange', () => setRoute(location.hash));
+setRoute(location.hash);
+
+const intro = [
+  "Initializing Hawkins terminal...",
+  "Scanning for cross-dimensional interference...",
+  "Warning: Residual energy detected near lab gates.",
+  "Welcome, operator. Proceed with caution."
+];
+(function typewrite(){
+  const el = document.getElementById('typewriter');
+  let i = 0, j = 0;
+  function nextLine(){
+    if(i >= intro.length) return;
+    const line = intro[i];
+    const span = document.createElement('div');
+    el.appendChild(span);
+    j = 0;
+    const timer = setInterval(()=>{
+      span.textContent = line.slice(0, j++);
+      if(j > line.length){
+        clearInterval(timer);
+        i++;
+        setTimeout(nextLine, 550);
+      }
+    }, 26);
+  }
+  nextLine();
+})();
+
+function mountAnomalies(){
+  const grid = document.getElementById('anomaliesGrid');
+  grid.innerHTML = '';
+  anomalies.forEach(a=>{
+    const d = document.createElement('div');
+    d.className = 'item';
+    d.innerHTML = `
+      <h4>${a.title}</h4>
+      <div class="tag">${a.tag}</div>
+      <p>${a.note}</p>`;
+    grid.appendChild(d);
+  });
+}
+function mountCharacters(){
+  const grid = document.getElementById('charactersGrid');
+  grid.innerHTML = '';
+  characters.forEach(c=>{
+    const d = document.createElement('div');
+    d.className = 'item';
+    d.innerHTML = `
+      <h4>${c.name}</h4>
+      <div><span class="tag">${c.role}</span><span class="tag">Power: ${c.power}</span></div>
+      <p>${c.note}</p>
+      <button class="btn addTeam">Add to squad</button>`;
+    d.querySelector('.addTeam').addEventListener('click', ()=> addToTeam(c));
+    grid.appendChild(d);
+  });
+}
+const team = [];
+function addToTeam(c){
+  if(!team.find(t=>t.name===c.name)){
+    team.push(c);
+    renderTeam();
+  }
+}
+function renderTeam(){
+  const grid = document.getElementById('teamGrid');
+  grid.innerHTML = '';
+  if(team.length===0){
+    const d = document.createElement('div'); d.className='item';
+    d.innerHTML = `<p>No agents assigned. Select profiles above to add.</p>`;
+    grid.appendChild(d);
+    return;
+  }
+  team.forEach(c=>{
+    const d = document.createElement('div');
+    d.className = 'item';
+    d.innerHTML = `
+      <h4>${c.name}</h4>
+      <div><span class="tag">${c.role}</span><span class="tag">Power: ${c.power}</span></div>
+      <p>${c.note}</p>
+      <button class="btn">Remove</button>`;
+    d.querySelector('button').addEventListener('click', ()=>{
+      const idx = team.findIndex(t=>t.name===c.name);
+      if(idx>=0){ team.splice(idx,1); renderTeam(); }
+    });
+    grid.appendChild(d);
+  });
+}
+function mountEpisodes(){
+  const grid = document.getElementById('episodesGrid');
+  grid.innerHTML = '';
+  episodes.forEach(e=>{
+    const d = document.createElement('div'); d.className='item';
+    d.innerHTML = `
+      <h4>S${e.season}: ${e.name}</h4>
+      <div><span class="tag">${e.type}</span><span class="tag">Vibe: ${e.vibe}</span></div>
+      <p>Archive notes: Playback artifacts consistent with dimensional stress.</p>
+      <button class="btn">Play intro stinger</button>`;
+    d.querySelector('button').addEventListener('click', ()=> playStinger());
+    grid.appendChild(d);
+  });
+}
+function mountEntities(){
+  const grid = document.getElementById('entitiesGrid');
+  grid.innerHTML = '';
+  entities.forEach(ent=>{
+    const d = document.createElement('div'); d.className='item';
+    d.innerHTML = `
+      <h4>${ent.name}</h4>
+      <div><span class="tag">Threat: ${ent.threat}</span></div>
+      <p>${ent.note}</p>`;
+    grid.appendChild(d);
+  });
+}
+function mountFiles(){
+  const grid = document.getElementById('filesGrid');
+  grid.innerHTML = '';
+  files.forEach(f=>{
+    const d = document.createElement('div'); d.className='item';
+    d.innerHTML = `
+      <h4>${f.id} — ${f.title}</h4>
+      <p>${f.note}</p>
+      <button class="btn">Decrypt</button>`;
+    d.querySelector('button').addEventListener('click', ()=>{
+      d.querySelector('p').textContent = "Decrypted: Signal coherence rises with synchronized breathing. Stay calm.";
+      playStinger(0.4);
+    });
+    grid.appendChild(d);
+  });
+}
+mountAnomalies();
+mountCharacters();
+renderTeam();
+mountEpisodes();
+mountEntities();
+mountFiles();
+
+const fanFeed = [];
+document.getElementById('fanSubmit').addEventListener('click', ()=>{
+  const name = (document.getElementById('fanName').value || 'Operator').slice(0,28);
+  const note = (document.getElementById('fanNote').value || '').slice(0,160);
+  if(!note.trim()) return;
+  fanFeed.unshift({ name, note, time: new Date().toLocaleTimeString() });
+  document.getElementById('fanNote').value = '';
+  renderFanFeed();
+});
+function renderFanFeed(){
+  const grid = document.getElementById('fanFeed');
+  grid.innerHTML = '';
+  if(fanFeed.length===0){
+    const d = document.createElement('div'); d.className='item';
+    d.innerHTML = `<p>No logs yet. Be the first to file a theory.</p>`;
+    grid.appendChild(d);
+    return;
+  }
+  fanFeed.forEach(entry=>{
+    const d = document.createElement('div'); d.className='item';
+    d.innerHTML = `
+      <h4>${entry.name}</h4>
+      <p>${entry.note}</p>
+      <div class="tag">Time: ${entry.time}</div>`;
+    grid.appendChild(d);
+  });
+}
+renderFanFeed();
+
+let audioOn = false;
+let audioCtx;
+let ambientNodes = null;
+
+function initAudio(){
+  if(audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+function startAmbient(){
+  initAudio();
+  const baseGain = audioCtx.createGain();
+  baseGain.gain.value = 0.08;
+
+  const osc = audioCtx.createOscillator();
+  osc.type = 'sawtooth';
+  osc.frequency.value = 58;
+  const oscGain = audioCtx.createGain(); oscGain.gain.value = 0.08;
+
+  const bufferSize = 2 * audioCtx.sampleRate;
+  const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = noiseBuffer.getChannelData(0);
+  for (let i=0; i<bufferSize; i++) data[i] = Math.random()*2-1;
+  const noise = audioCtx.createBufferSource(); noise.buffer = noiseBuffer; noise.loop = true;
+  const noiseFilter = audioCtx.createBiquadFilter(); noiseFilter.type='bandpass'; noiseFilter.frequency.value=1200; noiseFilter.Q.value=0.8;
+  const noiseGain = audioCtx.createGain(); noiseGain.gain.value = 0.04;
+
+  const sub = audioCtx.createOscillator(); sub.type='sine'; sub.frequency.value=32;
+  const subGain = audioCtx.createGain(); subGain.gain.value = 0.06;
+
+  osc.connect(oscGain).connect(baseGain);
+  noise.connect(noiseFilter).connect(noiseGain).connect(baseGain);
+  sub.connect(subGain).connect(baseGain);
+  baseGain.connect(audioCtx.destination);
+
+  osc.start(); noise.start(); sub.start();
+  ambientNodes = { baseGain, osc, oscGain, noise, noiseGain, sub, subGain };
+}
+function stopAmbient(){
+  if(!ambientNodes) return;
+  ['oscGain','noiseGain','subGain','baseGain'].forEach(k=>{
+    ambientNodes[k].gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+0.3);
+  });
+  setTimeout(()=>{
+    try { ambientNodes.os.stop(); ambientNodes.noise.stop(); ambientNodes.sub.stop(); } catch(e){}
+    ambientNodes = null;
+  }, 420);
+}
+document.getElementById('soundToggle').addEventListener('click', ()=>{
+  audioOn = !audioOn;
+  document.getElementById('soundToggle').textContent = `Sound: ${audioOn ? 'On' : 'Off'}`;
+  if(audioOn) startAmbient(); else stopAmbient();
+});
+
+function playStinger(intensity=0.7){
+  initAudio();
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator(); osc.type='triangle'; osc.frequency.setValueAtTime(220, now);
+  const gain = audioCtx.createGain(); gain.gain.value = 0.0001;
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start();
+  gain.gain.exponentialRampToValueAtTime(intensity, now+0.02);
+  osc.frequency.exponentialRampToValueAtTime(44, now+0.4);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now+0.6);
+  setTimeout(()=>{ try{ osc.stop(); }catch(e){} }, 620);
+}
+(function spores(){
+  const canvas = document.getElementById('spores');
+  const ctx = canvas.getContext('2d');
+  function resize(){ canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight; }
+  window.addEventListener('resize', resize); resize();
+
+  const spores = Array.from({length: 120}, ()=>({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    r: Math.random()*2.4+0.6,
+    vx: (Math.random()-0.5)*0.3,
+    vy: (Math.random()-0.5)*0.3,
+    glow: Math.random()*0.6+0.2
+  }));
+  let mx = -999, my = -999;
+  canvas.addEventListener('mousemove', e=>{
+    const rect = canvas.getBoundingClientRect();
+    mx = e.clientX - rect.left; my = e.clientY - rect.top;
+  });
+
+  function step(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    for(const s of spores){
+      const dx = s.x - mx, dy = s.y - my;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if(d < 80){ s.vx += dx/d * 0.02; s.vy += dy/d * 0.02; } else {
+        s.vx += (Math.random()-0.5)*0.004;
+        s.vy += (Math.random()-0.5)*0.004;
+      }
+      s.x += s.vx; s.y += s.vy;
+      if(s.x<0||s.x>canvas.width) s.vx*=-1;
+      if(s.y<0||s.y>canvas.height) s.vy*=-1;
+
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(229,9,20,${0.06 + s.glow*0.08})`;
+      ctx.shadowColor = 'rgba(229,9,20,0.5)';
+      ctx.shadowBlur = 16 * s.glow;
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+    requestAnimationFrame(step);
+  }
+  step();
+})();
+
+const modal = document.getElementById('labModal');
+document.getElementById('openLabAccess').addEventListener('click', ()=> modal.style.display='flex');
+document.getElementById('labClose').addEventListener('click', ()=> modal.style.display='none');
+
+document.getElementById('labLogin').addEventListener('click', ()=>{
+  const user = document.getElementById('labUser').value.trim();
+  const pass = document.getElementById('labPass').value.trim();
+  const status = document.getElementById('labStatus');
+
+  if(!pass){
+    status.textContent = "Access denied: keyphrase required.";
+    return;
+  }
+  const role = pass.toLowerCase() === 'redroom' ? 'Senior Agent' : 'Agent';
+  status.textContent = `Access granted: ${role}. UI enhancements enabled.`;
+  modal.style.display = 'none';
+
+  document.querySelectorAll('.section').forEach(s=>{
+    s.style.boxShadow = '0 0 18px rgba(229,9,20,0.28)';
+  });
+  files.push({ id:"HF-042", title:"Senior dossier", note:"Vector fields show resonance with childhood memory nodes." });
+  mountFiles();
+  playStinger(0.9);
+});
+</script>
+</body>
+</html>
